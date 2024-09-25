@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Button} from 'react-native';
+import { StyleSheet, View, CustomButton, Text, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 
 function Calculator(){
@@ -9,16 +9,18 @@ function Calculator(){
       bottom: '',
       operatorStatus: 0
   });
+  function enterNum(title) { 
+    let currentNum = slot.main + title;
+    setSlot({ ...slot, main: currentNum });
+  }
 
-  function enterNum(e){ // Bấm vào số thì nhập số
-      let currentNum = mainSlot + e.innerText;
-      setSlot({...slot, main: currentNum});
+  function enterOperators(title) { 
+      if (slot.operatorStatus === 0) {
+          let currentOperator = title;
+          setSlot({ ...slot, top: slot.main + currentOperator, main: '', operatorStatus: 1 });
+      }
   }
-  function enterOperators(e){ //Bấm vào toán tử, nếu operatorStatus = 0 thì nhập, không thì thôi
-      let currentOperator = e.innerText;
-      if(slot.operatorStatus === 0)
-          setSlot({...slot, top: slot.main + currentOperator, operatorStatus: 1});
-  }
+
   function calculate(){
       let currentCalculation = slot.top + slot.main;
       setSlot({...slot, bottom: eval(currentCalculation)});
@@ -29,42 +31,110 @@ function Calculator(){
   function AC(){
       setSlot({top: '', main: '', bottom: '', operatorStatus: 0});
   }
+  const CustomButton = ({ onPress, title, style }) => (
+    <TouchableOpacity onPress={onPress} style={style}>
+      <Text style={styles.CustomButtonText}>{title}</Text>
+    </TouchableOpacity>
+  );
   return(
       <>
-      <View>
-          <View cllassName="">{ topSlot }</View>
-          <View>{ mainSlot }</View>
-          <View>{ bottomSlot }</View>
-          <View>
-              <Button onClick={AC}>AC</Button>
-              <Button onClick={CE}>CE</Button>
-              <Button onClick={(e) => enterOperators(e)}>%</Button>
-              <Button onClick={(e) => enterOperators(e)}>/</Button>
-              <View onClick={(e) => enterNum(e)}>
-                  <Button>7</Button>
-                  <Button>8</Button>
-                  <Button>9</Button>
+      <View style={styles.container}>
+          <View style={styles.results}>
+            <View>
+              <Text style={styles.output}>{ slot.top }</Text>
+            </View>
+            <View>
+              <Text style={styles.output}>{ slot.main }</Text>
               </View>
-              <View onClick={(e) => enterOperators(e)}>*</View>
-              <View onClick={(e) => enterNum(e)}>
-                  <View>4</View>
-                  <View>5</View>
-                  <View>6</View>
+            <View>
+              <Text>{ slot.bottom }</Text>
               </View>
-              <View onClick={(e) => enterOperators(e)}>-</View>
-              <View onClick={(e) => enterNum(e)}>
-                  <View>1</View>
-                  <View>2</View>
-                  <View>3</View>
-              </View>
-              <View onClick={(e) => enterOperators(e)}>+</View>
-              <View onClick={(e) => enterNum(e)}>0</View>
-              <View onClick={(e) => enterOperators(e)}>.</View>
-              <View onClick={calculate}>=</View>
+          </View>
+          <View style={styles.buttonContainer}>
+              <CustomButton onPress={AC} style={styles.clearButtonStyle} title='AC'></CustomButton>
+              <CustomButton onPress={CE} style={styles.clearButtonStyle} title='CE'></CustomButton>
+              <CustomButton onPress={() => enterOperators('%') } style={styles.operatorButtonStyle} title='%'></CustomButton>
+              <CustomButton onPress={() => enterOperators('/')} style={styles.operatorButtonStyle} title='/'></CustomButton>
+                  <CustomButton title='7' onPress={() => enterNum('7')} style={styles.buttonStyle}></CustomButton>
+                  <CustomButton title='8' onPress={() => enterNum('8')} style={styles.buttonStyle}></CustomButton>
+                  <CustomButton title='9' onPress={() => enterNum('9')} style={styles.buttonStyle}></CustomButton>
+              <CustomButton onPress={() => enterOperators('*') } style={styles.operatorButtonStyle} title='*'></CustomButton>
+                  <CustomButton title='4' onPress={() => enterNum('4')} style={styles.buttonStyle}></CustomButton>
+                  <CustomButton title='5' onPress={() => enterNum('5')} style={styles.buttonStyle}></CustomButton>
+                  <CustomButton title='6' onPress={() => enterNum('6')} style={styles.buttonStyle}></CustomButton>
+
+                  <CustomButton onPress={() => enterOperators('-')} style={styles.operatorButtonStyle} title='-'></CustomButton>
+                  <CustomButton title='1' onPress={() => enterNum('1')} style={styles.buttonStyle}></CustomButton>
+                  <CustomButton title='2' onPress={() => enterNum('2')} style={styles.buttonStyle}></CustomButton>
+                  <CustomButton title='3'onPress={() => enterNum('3')} style={styles.buttonStyle}></CustomButton>
+              <CustomButton onPress={() => enterOperators('+')} style={styles.operatorButtonStyle} title='+'></CustomButton>
+              <CustomButton onPress={() => enterNum('0')} title='0' style={styles.buttonStyle}></CustomButton>
+              <CustomButton onPress={() => enterOperators('.')} title='.' style={styles.buttonStyle}></CustomButton>
+              <CustomButton onPress={calculate} title='=' style={styles.resultButtonStyle}></CustomButton>
           </View>
       </View>
       </>
   );
 }
 
+const styles = StyleSheet.create({
+    container: {
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'grey'
+    },
+    output_right:{
+      textAlign: 'right',
+      fontSize: 30
+    },
+    output_left: {
+      textAlign: 'left',
+      fontSize: 30
+    },
+    results: {
+      height: '40%'
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    buttonStyle: {
+      backgroundColor: 'white',
+      margin: 5,
+      borderRadius: 5,
+      width: '22%', 
+      aspectRatio: 1,  
+      justifyContent: 'center',
+      alignItems: 'center', 
+    },
+    clearButtonStyle: {
+      backgroundColor: 'white',
+      color: 'red',
+      margin: 5,
+      borderRadius: 5,
+      width: '22%', 
+      aspectRatio: 1,  
+      justifyContent: 'center',
+      alignItems: 'center', 
+    },
+    operatorButtonStyle: {
+      backgroundColor: 'white',
+      margin: 5,
+      color: 'yellow',
+      borderRadius: 5,
+      width: '22%',  
+      aspectRatio: 1, 
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    resultButtonStyle: {
+      backgroundColor: 'yellow',
+      margin: 5,
+      borderRadius: 5,
+      width: '45%',  
+      aspectRatio: 1, 
+      justifyContent: 'center',
+      alignItems: 'center',
+    }
+});
 export default Calculator;
