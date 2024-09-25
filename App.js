@@ -63,12 +63,12 @@ function Calculator(){
                   <CustomButton title='5' onPress={() => enterNum('5')} style={styles.buttonStyle}></CustomButton>
                   <CustomButton title='6' onPress={() => enterNum('6')} style={styles.buttonStyle}></CustomButton>
 
-                  <CustomButton onPress={() => enterOperators('-')} style={styles.operatorButtonStyle} title='-'></CustomButton>
+              <CustomButton onPress={() => enterOperators('-')} style={styles.operatorButtonStyle} title='-'></CustomButton>
                   <CustomButton title='1' onPress={() => enterNum('1')} style={styles.buttonStyle}></CustomButton>
                   <CustomButton title='2' onPress={() => enterNum('2')} style={styles.buttonStyle}></CustomButton>
                   <CustomButton title='3'onPress={() => enterNum('3')} style={styles.buttonStyle}></CustomButton>
               <CustomButton onPress={() => enterOperators('+')} style={styles.operatorButtonStyle} title='+'></CustomButton>
-              <CustomButton onPress={() => enterNum('0')} title='0' style={styles.buttonStyle}></CustomButton>
+                  <CustomButton onPress={() => enterNum('0')} title='0' style={styles.buttonStyle}></CustomButton>
               <CustomButton onPress={() => enterOperators('.')} title='.' style={styles.buttonStyle}></CustomButton>
               <CustomButton onPress={calculate} title='=' style={styles.resultButtonStyle}></CustomButton>
           </View>
